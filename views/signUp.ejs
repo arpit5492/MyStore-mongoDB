@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="/signUp.css">
+    <title><%= title %></title>
+</head>
+<body>
+    <%- include("./partials/navbar.ejs"), {isLoggedIn: isLoggedIn} %>
+    <div class="container-fluid mt-5 form-container">
+        <form class="w-lg-25 shadow-lg p-3" onsubmit="validatePass(event)" action="/signUp" method="post">
+            <h2>Sign Up</h2>
+            <div class="form-control">
+                <div class="row">
+                    <div class="col-12">
+                        <label class="form-label fw-bold fs-5 my-3">Username <span class="fs-6 text-secondary fst-italic">(Email)</span></label>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            name="username"
+                            placeholder="name@example.com"
+                            required="true"
+                        >
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="form-label fw-bold fs-5 my-3">Password</label>
+                    <div class="col-10 mt-2 mb-3">
+                        <input 
+                            type="password" 
+                            class="form-control" 
+                            name="password"
+                            placeholder="Password"
+                            id="passInp"                            
+                        >
+                    </div>
+                    <div class="col-2 mt-2 mb-3 btn">
+                        <i 
+                        class="bi bi-eye-slash"
+                        name="passHidden"
+                        onclick="toggleDisplay(this)"
+                        ></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="form-label fw-bold fs-5 my-3">Confirm Password</label>
+                    <div class="col-10 mt-2 mb-3">
+                        <input 
+                            type="password" 
+                            class="form-control" 
+                            name="conf_pass"
+                            placeholder="Confirm Password"
+                            id="confPassInp"
+                        >
+                    </div>
+                    <div class="col-2 mt-2 mb-3 btn">
+                        <i 
+                        class="bi bi-eye-slash"
+                        name="confPassHidden"
+                        onclick="toggleDisplay(this)">
+                        </i>
+                    </div>
+                </div>
+                <div id="helper-text" class="text-danger"></div>
+                
+            </div>
+
+            <button class="btn btn-primary fs-5 w-100 mt-3" type="submit">Sign Up</button>
+        </form>
+    </div>
+    <script>
+        let passInp = document.getElementById("passInp");
+        let confPassInp = document.getElementById("confPassInp");
+
+        const toggleDisplay = (e) => {
+            let selected = e.getAttribute("name");
+
+            switch(selected){
+                case "passHidden":
+                    passInp.type = "text";
+                    e.className = "bi bi-eye"
+                    e.setAttribute("name", "passVisible");
+                    break;
+                case "passVisible":
+                    passInp.type = "password";
+                    e.className = "bi bi-eye-slash";
+                    e.setAttribute("name", "passHidden");
+                    break;
+                case "confPassHidden":
+                    confPassInp.type = "text";
+                    e.className = "bi bi-eye";
+                    e.setAttribute("name", "confPassVisible");
+                    break;
+                case "confPassVisible":
+                    confPassInp.type = "password";
+                    e.className = "bi bi-eye-slash";
+                    e.setAttribute("name", "confPassHidden");
+            }
+        }
+
+        const validatePass = (e) => {
+            if(passInp.value === confPassInp.value){
+                document.getElementById("helper-text").innerHTML = "";
+                return true;
+            } else {
+                document.getElementById("helper-text").innerHTML = "Passwords does not match";
+                e.preventDefault();
+                return false;
+            }
+        }
+
+        passInp.addEventListener("input", validatePass);
+        confPassInp.addEventListener("input", validatePass);
+    </script>
+</body>
+</html>

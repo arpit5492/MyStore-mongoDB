@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/editProd.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title><%= title %></title>
+</head>
+<body>
+    <%- include("./partials/navbar.ejs"), {isLoggedIn: isLoggedIn} %>
+    <div class="container-fluid mt-5 form-container">
+        <form class="w-35 shadow-lg p-3" action=<%= "/editProd/" + prod.id %> method="post" enctype="multipart/form-data">
+            <h2>Edit Product</h2>
+            <div class="form-control">
+                <div class="row">
+                    <div class="col-8">
+                        <label class="form-label fw-bold fs-5 my-3">Product Name</label>
+                        <input type="text" class="form-control" name="prod_name" value=<%= prod.pName %>>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label fw-bold fs-5 my-3">Price</label>
+                        <input type="text" class="form-control" name="price" value=<%= prod.price %>>
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label fw-bold fs-5 my-3">Select Image</label>
+                    <input type="file" class="form-control mb-3" name="image">
+                </div>
+            </div>
+
+            <button class="btn btn-primary fs-5 w-100 mt-3" type="submit">Edit Product</button>
+        </form>
+    </div>
+</body>
+</html>
