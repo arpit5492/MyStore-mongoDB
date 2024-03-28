@@ -4,10 +4,12 @@ import dotenv from "dotenv";
 import session from "express-session";
 import bcrpyt, { hash } from "bcrypt";
 import multer from "multer";
-import mysqlSequelize from "connect-session-sequelize";
-import { sequelize } from "./config/database.js";
-import { User } from "./db/user.js";
-import { Product } from "./db/product.js";
+// import mysqlSequelize from "connect-session-sequelize";
+// import { sequelize } from "./config/database.js";
+import mongoose from "mongoose";
+import { db } from "./config/database.js";
+// import { User } from "./db/user.js";
+// import { Product } from "./db/product.js";
 import home from "./services/home.js";
 import addProd from "./services/addProd.js";
 import editProd from "./services/editProd.js";
@@ -20,21 +22,21 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 
-const SequelizeStore = mysqlSequelize(session.Store);
+// const SequelizeStore = mysqlSequelize(session.Store);
 
-const sessionStore = new SequelizeStore({
-    db: sequelize
-});
+// const sessionStore = new SequelizeStore({
+//     db: sequelize
+// });
 
-sessionStore.sync();
+// sessionStore.sync();
 
 //Middleware functions
-app.use(session({
-    secret: "It is a secret",
-    resave: false,
-    saveUninitialized: false,
-    store: sessionStore
-}));
+// app.use(session({
+//     secret: "It is a secret",
+//     resave: false,
+//     saveUninitialized: false,
+//     store: sessionStore
+// }));
 
 const store = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -68,20 +70,16 @@ app.use("/", login);
 
 const main = async() => {
     try{
-        await sequelize.authenticate();
-        console.log("Database connected succefully!!");
-        await User.sync();
-        await Product.sync();
-        console.log("Tables created");
+        await mongoose.connect(db);
+        console.log("Database connected!!");
     } catch(err) {
-        console.log(err);
+        console.log(err.message);
     }
 }
 
 main();
 
-sequelize.sync().then(() => {
-    app.listen(port, () => {
-        console.log(`Server is running on: http://localhost:${port}`);
-    });
+app.listen(port, () => {
+    console.log(`Server is running on: http://localhost:${port}`);
 });
+
