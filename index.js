@@ -6,6 +6,7 @@ import bcrpyt, { hash } from "bcrypt";
 import multer from "multer";
 // import mysqlSequelize from "connect-session-sequelize";
 // import { sequelize } from "./config/database.js";
+import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import { db } from "./config/database.js";
 // import { User } from "./db/user.js";
@@ -22,21 +23,27 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 
-// const SequelizeStore = mysqlSequelize(session.Store);
+const main = async() => {
+    try{
+        await mongoose.connect(db);
+        console.log("Database connected!!");
+    } catch(err) {
+        console.log(err.message);
+    }
+}
 
-// const sessionStore = new SequelizeStore({
-//     db: sequelize
-// });
-
-// sessionStore.sync();
+main();
 
 //Middleware functions
-// app.use(session({
-//     secret: "It is a secret",
-//     resave: false,
-//     saveUninitialized: false,
-//     store: sessionStore
-// }));
+app.use(session({
+    secret: "It is a secret",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+        mongooseConnection: mongoose.connection,
+        mongoUrl: db
+    })
+}));
 
 const store = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -68,16 +75,7 @@ app.use("/delProd", delProd);
 app.use("/", signUp);
 app.use("/", login);
 
-const main = async() => {
-    try{
-        await mongoose.connect(db);
-        console.log("Database connected!!");
-    } catch(err) {
-        console.log(err.message);
-    }
-}
 
-main();
 
 app.listen(port, () => {
     console.log(`Server is running on: http://localhost:${port}`);

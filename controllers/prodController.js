@@ -1,10 +1,10 @@
-// import { Product } from "../db/product.js";
+import { Product } from "../db/product.js";
 
 // getting all the products
 const getAllProds = async (req, res) => {
     try{
-        const products = await Product.findAll();
-        console.log(JSON.stringify(products, null, 2));
+        const products = await Product.find();
+        console.log((products));
         res.render("home", {title: "Home", products: products, isLoggedIn: global.isLoggedIn});
     } catch(err) {
         console.log(err);

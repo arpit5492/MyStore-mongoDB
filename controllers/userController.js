@@ -1,5 +1,5 @@
 // import { updateUser, fetchDet } from "../db/user.js";
-// import { User } from "../db/user.js";
+import { User } from "../db/user.js";
 import JWT from "jsonwebtoken";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
@@ -18,11 +18,13 @@ const addUser = async (req, res) => {
     // console.log(username, password);
 
     try{
-        await User.create({
+        const newUser = new User({
             username: username,
             password: hashedPass
         });
-        console.log("User added successfully!!");
+
+        await newUser.save();
+        console.log("User added successfully!!", newUser);
         global.isLoggedIn = "true";
         res.redirect("/");
     } catch(err) {
@@ -39,8 +41,8 @@ const postLogin = async (req, res) => {
     // console.log(req.body);
     const {username, password} = req.body;
     try{
-        const userDet = await User.findOne({where: {username: username}});
-        console.log(JSON.stringify(userDet, null, 2));
+        const [userDet] = await User.find({username: username});
+        console.log((userDet));
         const isMatch = bcrypt.compareSync(password, userDet.password);
         console.log(isMatch);
 
