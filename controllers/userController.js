@@ -1,5 +1,5 @@
 // import { updateUser, fetchDet } from "../db/user.js";
-import { User } from "../db/user.js";
+// import { User } from "../db/user.js";
 import JWT from "jsonwebtoken";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
