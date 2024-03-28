@@ -4,13 +4,9 @@ import dotenv from "dotenv";
 import session from "express-session";
 import bcrpyt, { hash } from "bcrypt";
 import multer from "multer";
-// import mysqlSequelize from "connect-session-sequelize";
-// import { sequelize } from "./config/database.js";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import { db } from "./config/database.js";
-// import { User } from "./db/user.js";
-// import { Product } from "./db/product.js";
 import home from "./services/home.js";
 import addProd from "./services/addProd.js";
 import editProd from "./services/editProd.js";
@@ -55,13 +51,6 @@ const store = multer.diskStorage({
 })
 
 app.use(multer( {storage: store} ).single("image"));
-
-// app.get("/bcrypt", async (req, res) => {
-//     const password = "password";
-//     const hashedPass = await bcrpyt.hash(password, 10);
-//     console.log(await bcrpyt.compare("hello", hashedPass));
-//     res.send(hashedPass);
-// });  
 
 app.set("view engine", "ejs");
 app.set("views", "views");
